@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 app = Flask(__name__)
 
-model = joblib.load('news_review_model.pkl')
+model = joblib.load('news_model.pkl')
 
 vectorizer = joblib.load('fitted_vectorizer.pkl')
 
@@ -22,20 +22,14 @@ def predict():
         url = request.form['news_url']
         source_domain = request.form['source_domain']
         user_input = news_title + " " + url + " " + source_domain
-        preprocessed_input = preprocess_text(user_input)
+        # preprocessed_input = preprocess_text(user_input)
 
-        text_input_transformed = vectorizer.transform([preprocessed_input])
+        text_input_transformed = vectorizer.transform([user_input])
         text_input_array = text_input_transformed.toarray()
 
         prediction = model.predict(text_input_array)[0]
 
         return render_template('result.html', prediction=prediction)
-
-def preprocess_text(text):
-    text = text.lower()
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    text = ' '.join(text.split())
-    return text
 
 if __name__ == '__main__':
     app.run(debug=True)
