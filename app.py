@@ -18,8 +18,10 @@ def home():
 def predict():
     if request.method == 'POST':
         
-        user_input = request.form['user_input']
-
+        news_title = request.form['news_title']
+        url = request.form['news_url']
+        source_domain = request.form['source_domain']
+        user_input = news_title + " " + url + " " + source_domain
         preprocessed_input = preprocess_text(user_input)
 
         text_input_transformed = vectorizer.transform([preprocessed_input])
